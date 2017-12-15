@@ -1,0 +1,12 @@
+---
+# tasks file for java_test
+
+- name: java test
+  shell: java -version
+  register: java_v
+  failed_when: "'1.8.0' not in java_v.stderr"
+  changed_when: False
+
+- name: display java check
+  debug: 
+    msg: "{{ java_v.stderr }}"

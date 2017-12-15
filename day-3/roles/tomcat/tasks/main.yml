@@ -1,0 +1,96 @@
+---
+# tasks file for tomcat
+
+- name: make group for tomcat
+  group:
+    name: "{{ tomcat_group }}"
+    state: present
+  become_method: sudo
+  become: True
+
+- name: make user for tomcat
+  user:
+    name: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+  become_method: sudo
+  become: True
+
+- name: "check for existance {{ tomcat_version }}"
+  stat:
+    path: "{{ catalina_home }}"
+  register: check
+
+- name: mkdir for tomcat
+  file:
+    path: "{{ catalina_home }}"
+    recurse: yes
+    state: directory
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+  become_method: sudo
+  become: True
+
+- name: download tomcat
+  get_url:
+    url: "{{ tomcat_link }}"
+    dest: /opt/tomcat/
+  become_method: sudo
+  become: True
+
+- name: unarchive
+  unarchive:
+    src: "/opt/tomcat/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "{{ catalina_home }}"
+    remote_src: yes
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    extra_opts: [--strip-components=1]
+  become_method: sudo
+  become: True
+  when: check.stat.exists == False
+
+- name: check for existance dir for logs
+  stat:
+    path: /var/log/tomcat/logs
+  register: check_logs
+
+- name: mk dir for tomcat logs
+  file:
+    path: /var/log/tomcat/logs
+    state: directory
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    mode: 0755
+    recurse: yes
+  become_method: sudo
+  become: True
+  when: check_logs.stat.exists == False
+
+- name: mk symlink for tomcat logs
+  file:
+    dest: "/opt/tomcat/{{ tomcat_version }}/logs"
+    src: /var/log/tomcat/logs
+    state: link
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    mode: 0755
+    force: yes
+  become_method: sudo
+  become: True
+
+- name: copy service file
+  template:
+    src: tomcat.j2
+    dest: /etc/systemd/system/tomcat.service
+  become_method: sudo
+  become: True
+  notify: 
+    - restart_tomcat
+
+- name: enable service
+  service:
+    name: tomcat
+    enabled: yes
+    state: started
+  become_method: sudo
+  become: True

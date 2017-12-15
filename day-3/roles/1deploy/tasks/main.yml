@@ -1,0 +1,49 @@
+- name: mkdir for deploy-info.txt
+  file:
+    path: /var/lib/tomcat/webapps
+    state: directory
+    recurse: yes
+    mode: 0777
+  become_method: sudo
+  become: True
+
+- name: copy context.xml
+  template:
+    src: context.j2
+    dest: /opt/tomcat/8.5.24/webapps/manager/META-INF/context.xml
+  become_method: sudo
+  become: True
+
+- name: copy tomcat-users
+  template:
+    src: tomcat-users.j2
+    dest: /opt/tomcat/8.5.24/conf/tomcat-users.xml
+  become_method: sudo
+  become: True
+
+- name: restart tomcat
+  systemd:
+    name: tomcat
+    state: restarted
+  become_method: sudo
+  become: True
+  register: a
+
+- wait_for:
+    timeout: 3
+
+- name: deploy
+  deploy:
+    war: "{{ war }}"
+    url: "{{ url }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+
+- name: test deployment
+  uri:
+    url: "http://192.168.1.2:8080/{{ url }}/"
+    method: GET
+    status_code: 200
+    return_content: yes
+  register: webpage
+  failed_when: "'Deploy' not in webpage.content"

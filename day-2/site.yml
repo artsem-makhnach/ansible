@@ -1,0 +1,15 @@
+- name: Installation
+  hosts: all
+
+  roles:
+  - { role: java }
+  - { role: tomcat, tomcat_version: 8.5.24 }
+  - { role: nginx }
+
+- name: Verification
+  hosts: all
+
+  roles:
+  - { role: java_test }
+  - { role: tomcat_test }
+  - { role: nginx_test }

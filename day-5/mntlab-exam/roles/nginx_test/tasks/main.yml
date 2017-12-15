@@ -1,0 +1,12 @@
+---
+# tasks file for nginx_test
+
+- name: check nginx
+  shell: "curl master:80 -IL"
+  register: check_nginx
+  failed_when: "'nginx' not in check_nginx.stdout"
+  changed_when: False
+
+- name: display nginx check
+  debug:
+    msg: "{{ check_nginx.stdout }}"

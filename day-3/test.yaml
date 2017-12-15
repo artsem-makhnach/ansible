@@ -1,0 +1,12 @@
+- name: test
+  hosts: localhost
+  vars: 
+    a: {'test1': {'type': '1', 'type2': '1' }, 'test2': {'type': '2', 'type2': '2' }}
+    b: ['test1', 'test2']
+
+  tasks:
+    - debug:
+        msg: "{{ item[1] }} {{ item[0] }}"
+      with_items:
+        - "{{ a }}"
+        - "{{ b }}"

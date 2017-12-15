@@ -1,0 +1,27 @@
+- name: add VM to hosts and untar artifact
+  hosts: localhost
+
+  tasks:
+    - name: import facts
+      include_vars:
+        file: facts.fact
+        name: facts
+
+    - debug:
+        msg: "{{ facts.meta.Hostname }}"
+
+    - add_host:
+        name: target
+        ansible_ssh_host: "{{ facts.meta.Hostname }}"
+        ansible_connection: ssh
+        ansible_ssh_port: "{{ facts.meta.Port }}"
+        ansible_ssh_user: "{{ facts.meta.User }}"
+        ansible_ssh_private_key_file: "{{ facts.meta.SSHKey }}"
+      changed_when: False
+      when: facts.meta.State == 'running'
+
+- name: deploy
+  hosts: target
+
+  roles:
+    - { role: deploy, war: "/vagrant/target/mnt-exam.war", url: "azaza1", username: "arm", password: "arm" }

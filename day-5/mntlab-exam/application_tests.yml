@@ -1,0 +1,18 @@
+- name: test deployment
+  hosts: localhost
+
+  tasks:
+    - name: import facts
+      include_vars:
+        file: url.fact
+        name: url
+
+    - name: test deployment
+      uri:
+        url: "http://127.0.0.1:8080/{{ url.url }}/"
+        method: GET
+        status_code: 200
+        return_content: yes
+      register: webpage
+      failed_when: "'Deploy' not in webpage.content"
+

@@ -1,0 +1,20 @@
+---
+- hosts: master1
+  vars:
+    tomcat_version: 8.5
+    tomcat_user: tomcat_as
+    tomcat_group: tomcat_as_group
+    catalina_home: '/opt/tomcat/"{{ tomcat_version }}"'
+    java_version:
+  tasks:
+  - name: make user for tomcat
+    user:
+      name: "{{ tomcat_user }}"
+      group: "{{ tomcat_group }}"
+  - name: mkdir for tomcat
+    file:
+      path: "{{ catalina_home }}"
+      recurse: yes
+      state: directory
+    become_method: sudo
+    become: True

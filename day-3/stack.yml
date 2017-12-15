@@ -1,0 +1,32 @@
+- name: Vagrant
+  hosts: localhost
+
+  tasks:
+    - name: Vagrant
+      vagrant:
+        path: '/home/student/cm/ansible/day-3/'
+        state: started
+      register: a
+
+    - debug:
+        msg: "{{ a }}"
+
+    - add_host:
+        name: master
+        ansible_ssh_host: "{{ a.meta.Hostname }}"
+        ansible_connection: ssh
+        ansible_ssh_port: "{{ a.meta.Port }}"
+        ansible_ssh_user: "{{ a.meta.User }}"
+        ansible_ssh_private_key_file: "{{ a.meta.SSHKey }}"
+      changed_when: False
+      when: a.meta.State == 'running'
+
+
+- name: Provision
+  hosts: master
+
+  roles:
+    - { role: java }
+    - { role: tomcat, tomcat_version: 8.5.24 }
+    - { role: nginx }
+# , when: a.meta.State == 'running'  

@@ -1,0 +1,9 @@
+Developer Name: Siarhei Beliakou
+Build time: 11:00
+Build Machine: epbyminw1766
+Build User Artsem Makhnach
+
+Git URL: ${GIT_URL}
+Git Commit: ${GIT_COMMIT}
+Git Branch: ${GIT_BRANCH}
+Build Date: Sat Mar 25 16:46:13 +03 2017 

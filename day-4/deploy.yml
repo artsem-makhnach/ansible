@@ -1,0 +1,7 @@
+- name: tomcat+deploy
+  hosts: master
+
+  roles:
+    - { role: java }
+    - { role: tomcat, tomcat_version: 8.5.24 }
+    - { role: deploy, war: "/vagrant/mnt-lab.war", url: "azaza1", username: "arm", password: "arm" }

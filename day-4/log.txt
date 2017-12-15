@@ -1,0 +1,41 @@
+TASK: Gathering Facts | master | OK | rc=n/a >>
+
+TASK: java : install java | master | OK | rc=0 >>
+
+TASK: tomcat : make group for tomcat | master | OK | rc=n/a >>
+
+TASK: tomcat : make user for tomcat | master | OK | rc=n/a >>
+
+TASK: tomcat : check for existance 8.5.24 | master | OK | rc=n/a >>
+
+TASK: tomcat : mkdir for tomcat | master | OK | rc=n/a >>
+
+TASK: tomcat : download tomcat | master | OK | rc=n/a >>
+OK (9487006 bytes)
+TASK: tomcat : unarchive | master | SKIPPED | rc=n/a >>
+
+TASK: tomcat : check for existance dir for logs | master | OK | rc=n/a >>
+
+TASK: tomcat : mk dir for tomcat logs | master | SKIPPED | rc=n/a >>
+
+TASK: tomcat : mk symlink for tomcat logs | master | OK | rc=n/a >>
+
+TASK: tomcat : copy service file | master | OK | rc=n/a >>
+
+TASK: tomcat : enable service | master | OK | rc=n/a >>
+
+TASK: deploy : mkdir for deploy-info.txt | master | OK | rc=n/a >>
+
+TASK: deploy : copy context.xml | master | OK | rc=n/a >>
+
+TASK: deploy : copy tomcat-users | master | OK | rc=n/a >>
+
+TASK: deploy : restart tomcat | master | OK | rc=n/a >>
+
+TASK: deploy : wait_for | master | OK | rc=n/a >>
+
+TASK: deploy : deploy | master | OK | rc=n/a >>
+deployed
+TASK: deploy : test deployment | master | OK | rc=n/a >>
+OK (258 bytes)
+Playbook run took 0 days, 0 hours, 0 minutes, 12 seconds

@@ -1,0 +1,18 @@
+# Systemd unit file for tomcat
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+ExecStart=/opt/tomcat/8.5.24/bin/startup.sh
+ExecStop=/opt/tomcat/8.4.25/bin/shutdown.sh
+
+User=tomcat_as
+Group=tomcat_as_group
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

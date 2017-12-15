@@ -1,0 +1,30 @@
+- name: add VM to hosts
+  hosts: localhost
+
+  tasks:
+    - name: import facts
+      include_vars:
+        file: facts.fact
+        name: facts
+
+    - debug:
+        msg: "{{ facts.meta.Hostname }}"
+
+
+    - add_host:
+        name: target
+        ansible_ssh_host: "{{ facts.meta.Hostname }}"
+        ansible_connection: ssh
+        ansible_ssh_port: "{{ facts.meta.Port }}"
+        ansible_ssh_user: "{{ facts.meta.User }}"
+        ansible_ssh_private_key_file: "{{ facts.meta.SSHKey }}"
+      changed_when: False
+      when: facts.meta.State == 'running'
+
+- name: Provision
+  hosts: target
+
+  roles:
+    - { role: java }
+    - { role: tomcat, tomcat_version: 8.5.24 }
+    - { role: nginx }

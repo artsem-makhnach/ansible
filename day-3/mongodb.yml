@@ -1,0 +1,25 @@
+- name: select mongodb link
+  hosts: localhost
+
+  connection: localhost
+
+  vars:
+    mongo_src:
+    - "http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel62-3.6.0.tgz"
+    - "http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel70-3.6.0.tgz"
+    - "http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel62-3.2.18.tgz"
+    - "http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel55-3.2.18.tgz"
+    - "http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel70-3.2.18.tgz"
+    - "http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel70-3.4.10.tgz"
+    - "http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel62-3.4.10.tgz"
+    - "http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel55-3.2.17.tgz"
+    - "http://downloads.mongodb.org/linux/mongodb-linux-x86_64-rhel62-3.2.17.tgz"
+    mongodb_version: '3.2'
+
+  tasks:
+
+  - debug:
+      msg: "{{ ansible_os_family }}"
+
+  - debug: 
+      msg: "{{ mongo_src | mongo_filter(ansible_os_family, '6', mongodb_version ) }}"

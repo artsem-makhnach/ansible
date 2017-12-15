@@ -1,0 +1,24 @@
+- name: create VM from vagrantfile
+  hosts: localhost
+
+  tasks:
+    - name: Vagrant
+      vagrant:
+        path: './'
+        state: started
+      register: a
+
+    - debug:
+        msg: "{{ a }}"
+
+    # - set_fact:
+    #     host: "{{ a.meta.Hostname }}"
+    #     connection: ssh
+    #     port: "{{ a.meta.Port }}"
+
+    # - debug:
+    #     msg: "{{ host }}"
+    - name: export VM params
+      copy:
+        content: "{{ a }}"
+        dest: ./facts.fact
